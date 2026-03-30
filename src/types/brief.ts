@@ -68,6 +68,6 @@ export const DEFAULT_BRIEF: CampaignBrief = {
     region: '국내',
   },
   budget: '5m_to_30m',
-  channels: ['linkedin', 'google_ads'],
+  channels: ['linkedin', 'google_ads', 'kakao', 'instagram', 'webinar', 'email', 'youtube', 'blog'],
   language: 'ko',
 };

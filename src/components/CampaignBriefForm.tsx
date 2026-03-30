@@ -1,13 +1,11 @@
 import { useState } from 'react';
-import type { CampaignBrief, CampaignObjective, BudgetRange, OutputLanguage } from '../types/brief';
+import type { CampaignBrief, CampaignObjective } from '../types/brief';
 import {
   DEFAULT_BRIEF,
   OBJECTIVE_LABELS,
-  BUDGET_LABELS,
   TARGET_ROLES,
   INDUSTRIES,
   REGIONS,
-  CHANNELS,
 } from '../types/brief';
 
 interface CampaignBriefFormProps {
@@ -26,16 +24,7 @@ export default function CampaignBriefForm({ onSubmit, isGenerating }: CampaignBr
     setBrief(prev => ({ ...prev, target: { ...prev.target, [key]: value } }));
   };
 
-  const toggleChannel = (channelId: string) => {
-    setBrief(prev => ({
-      ...prev,
-      channels: prev.channels.includes(channelId)
-        ? prev.channels.filter(c => c !== channelId)
-        : [...prev.channels, channelId],
-    }));
-  };
-
-  const canSubmit = brief.productName.trim().length > 0 && brief.channels.length > 0;
+  const canSubmit = brief.productName.trim().length > 0;
 
   return (
     <div className="absolute inset-0 z-40 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
@@ -125,77 +114,10 @@ export default function CampaignBriefForm({ onSubmit, isGenerating }: CampaignBr
             </div>
           </div>
 
-          {/* 4. 예산 규모 */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">④ 예산 규모</label>
-            <div className="flex gap-2">
-              {(Object.entries(BUDGET_LABELS) as [BudgetRange, string][]).map(([key, label]) => (
-                <button
-                  key={key}
-                  onClick={() => update('budget', key)}
-                  className={`flex-1 text-[11px] py-1.5 rounded-lg border transition-colors ${
-                    brief.budget === key
-                      ? 'border-emerald-500 bg-emerald-600/20 text-emerald-300'
-                      : 'border-slate-600 text-slate-400 hover:border-slate-500'
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 5. 선호 채널 */}
+          {/* 4. 추가 요청사항 */}
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1">
-              ⑤ 선호 채널 <span className="text-slate-500 font-normal">(복수 선택)</span>
-            </label>
-            <div className="grid grid-cols-4 gap-1.5">
-              {CHANNELS.map(ch => (
-                <button
-                  key={ch.id}
-                  onClick={() => toggleChannel(ch.id)}
-                  className={`text-[10px] py-1.5 px-1 rounded-lg border transition-colors flex flex-col items-center gap-0.5 ${
-                    brief.channels.includes(ch.id)
-                      ? 'border-purple-500 bg-purple-600/20 text-purple-300'
-                      : 'border-slate-600 text-slate-500 hover:border-slate-500'
-                  }`}
-                >
-                  <span className="text-sm">{ch.emoji}</span>
-                  <span>{ch.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 6. 산출물 언어 */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">⑥ 산출물 언어</label>
-            <div className="flex gap-2">
-              {([
-                { key: 'ko' as OutputLanguage, label: '🇰🇷 한국어' },
-                { key: 'en' as OutputLanguage, label: '🇺🇸 English' },
-                { key: 'multi' as OutputLanguage, label: '🌏 다국어' },
-              ]).map(lang => (
-                <button
-                  key={lang.key}
-                  onClick={() => update('language', lang.key)}
-                  className={`flex-1 text-[11px] py-1.5 rounded-lg border transition-colors ${
-                    brief.language === lang.key
-                      ? 'border-amber-500 bg-amber-600/20 text-amber-300'
-                      : 'border-slate-600 text-slate-400 hover:border-slate-500'
-                  }`}
-                >
-                  {lang.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 7. 추가 요청사항 */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
-              ⑦ 추가 요청사항 <span className="text-slate-500 font-normal">(선택)</span>
+              ④ 추가 요청사항 <span className="text-slate-500 font-normal">(선택)</span>
             </label>
             <textarea
               value={brief.additionalNotes || ''}
@@ -221,7 +143,7 @@ export default function CampaignBriefForm({ onSubmit, isGenerating }: CampaignBr
             )}
           </button>
           {!canSubmit && (
-            <p className="text-[10px] text-red-400/60 text-center mt-1">제품명과 채널을 1개 이상 선택해주세요</p>
+            <p className="text-[10px] text-red-400/60 text-center mt-1">제품명을 입력해주세요</p>
           )}
         </div>
       </div>
