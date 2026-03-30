@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Artifact, AgentName } from '../types';
+import CardNewsViewer from './CardNewsViewer';
+import type { CardNewsSlide } from './CardNewsViewer';
 
 interface ArtifactGalleryProps {
   artifacts: Artifact[];
@@ -13,6 +15,24 @@ const TABS: { key: AgentName | 'all'; label: string; emoji: string }[] = [
   { key: 'Mia', label: 'Mia', emoji: '✍️' },
   { key: 'Rex', label: 'Rex', emoji: '📊' },
 ];
+
+function CardNewsContent({ content }: { content: string }) {
+  const slides = useMemo<CardNewsSlide[]>(() => {
+    try {
+      return JSON.parse(content);
+    } catch {
+      return [];
+    }
+  }, [content]);
+
+  if (slides.length === 0) return <div className="p-3 text-xs text-slate-500">카드뉴스 로딩 실패</div>;
+
+  return (
+    <div className="p-3">
+      <CardNewsViewer slides={slides} />
+    </div>
+  );
+}
 
 export default function ArtifactGallery({ artifacts }: ArtifactGalleryProps) {
   const [activeTab, setActiveTab] = useState<AgentName | 'all'>('all');
@@ -81,15 +101,20 @@ export default function ArtifactGallery({ artifacts }: ArtifactGalleryProps) {
                     {artifact.artifactType === 'chart' && '📈'}
                     {artifact.artifactType === 'copy' && '✍️'}
                     {artifact.artifactType === 'diagram' && '🔀'}
+                    {artifact.artifactType === 'cardnews' && '🖼️'}
                   </span>
                   <span className="text-xs font-medium text-slate-300">{artifact.title}</span>
                   <span className="text-[10px] text-slate-500 ml-auto">{artifact.agent}</span>
                 </div>
                 {/* Artifact Content */}
-                <div
-                  className="p-3 text-xs text-slate-300 artifact-content"
-                  dangerouslySetInnerHTML={{ __html: artifact.content }}
-                />
+                {artifact.artifactType === 'cardnews' ? (
+                  <CardNewsContent content={artifact.content} />
+                ) : (
+                  <div
+                    className="p-3 text-xs text-slate-300 artifact-content"
+                    dangerouslySetInnerHTML={{ __html: artifact.content }}
+                  />
+                )}
               </motion.div>
             ))
           )}

@@ -86,7 +86,7 @@ export interface PublishDoneEvent extends BaseEvent {
 
 // --- New Event Types (v5.0) ---
 
-export type ArtifactType = 'table' | 'chart' | 'copy' | 'diagram';
+export type ArtifactType = 'table' | 'chart' | 'copy' | 'diagram' | 'cardnews';
 
 export interface ArtifactEvent extends BaseEvent {
   type: 'artifact';
