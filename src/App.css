@@ -1,0 +1,52 @@
+/* Cleared default Vite styles */
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 2px;
+}
+
+/* Artifact Gallery rendered HTML content */
+.artifact-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+.artifact-content th,
+.artifact-content td {
+  border: 1px solid #334155;
+  padding: 4px 6px;
+  text-align: left;
+}
+.artifact-content th {
+  background: #1e293b;
+  color: #94a3b8;
+  font-weight: 600;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+.artifact-content td {
+  color: #cbd5e1;
+}
+.artifact-content tr:nth-child(even) td {
+  background: #0f172a40;
+}
+
+/* Pixel art rendering */
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Progress bar animation for ResultPanel */
+@keyframes progress {
+  from { width: 0; }
+  to { width: 100%; }
+}

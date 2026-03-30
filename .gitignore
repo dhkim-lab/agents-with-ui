@@ -1,0 +1,32 @@
+# dependencies
+/node_modules
+
+# build
+/dist
+
+# env files
+.env
+.env.*
+.env.local
+.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Vercel
+.vercel
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Claude/AI agent workspace
+.claude/
