@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 import { useDemoEngine } from './hooks/useDemoEngine';
@@ -56,14 +56,17 @@ function App() {
     engine.startDemo();
   };
 
-  const handlePublishToBoard = useCallback(async () => {
-    if (!currentBrief) return;
+  // Auto-publish to board when demo completes
+  const publishedRef = useRef(false);
+  useEffect(() => {
+    if (!engine.isPublishDone || !currentBrief || publishedRef.current) return;
+    publishedRef.current = true;
 
     const result: CampaignResult = {
       id: crypto.randomUUID(),
       brief: currentBrief,
       artifacts: engine.artifacts,
-      decisions: [], // TODO: collect from engine
+      decisions: [],
       metrics: {
         totalTimeMs: engine.totalElapsedTimeMs,
         tokenCost: engine.usedTokens * 0.000007,
@@ -73,18 +76,14 @@ function App() {
     };
 
     const apiBase = import.meta.env.VITE_API_BASE || '';
-    try {
-      await fetch(`${apiBase}/api/results`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(result),
-      });
-    } catch (err) {
-      console.warn('Failed to publish result (API may not be configured):', err);
-    }
-
-    navigate('/board');
-  }, [currentBrief, engine.artifacts, engine.totalElapsedTimeMs, engine.usedTokens, navigate]);
+    fetch(`${apiBase}/api/results`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(result),
+    }).catch(err => {
+      console.warn('Failed to publish result:', err);
+    });
+  }, [engine.isPublishDone, currentBrief, engine.artifacts, engine.totalElapsedTimeMs, engine.usedTokens]);
 
   const showIntroOverlay = engine.isRoutinePhase;
 
@@ -149,16 +148,19 @@ function App() {
       {engine.isPublishDone && (
         <FinalSnsPopup
           onClose={() => {
+            publishedRef.current = false;
             engine.reset();
             setTimeout(() => engine.startRoutine(), 100);
           }}
           onNewMission={() => {
+            publishedRef.current = false;
             setCurrentBrief(null);
             engine.reset();
             setTimeout(() => engine.startRoutine(), 100);
           }}
           onRepeat={() => {
             if (currentBrief) {
+              publishedRef.current = false;
               engine.reset();
               const scenario = buildScenarioFromBrief(currentBrief);
               setActiveScenario(scenario);
@@ -168,7 +170,7 @@ function App() {
               }, 100);
             }
           }}
-          onPublishToBoard={handlePublishToBoard}
+          onViewBoard={() => navigate('/board')}
         />
       )}
 

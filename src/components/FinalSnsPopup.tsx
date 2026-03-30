@@ -6,10 +6,10 @@ interface FinalSnsPopupProps {
   onClose: () => void;
   onNewMission: () => void;
   onRepeat: () => void;
-  onPublishToBoard?: () => void;
+  onViewBoard?: () => void;
 }
 
-export const FinalSnsPopup: React.FC<FinalSnsPopupProps> = ({ onClose, onNewMission, onRepeat, onPublishToBoard }) => {
+export const FinalSnsPopup: React.FC<FinalSnsPopupProps> = ({ onClose, onNewMission, onRepeat, onViewBoard }) => {
   useEffect(() => {
     // Grand finale confetti
     const duration = 5 * 1000;
@@ -97,12 +97,12 @@ export const FinalSnsPopup: React.FC<FinalSnsPopupProps> = ({ onClose, onNewMiss
           <div className="mt-4 pt-4 border-t border-slate-100 flex flex-col gap-2">
             <h3 className="text-sm font-bold text-slate-800 text-center mb-1">다음 작업을 지시하시겠습니까?</h3>
 
-            {onPublishToBoard && (
+            {onViewBoard && (
               <button
-                onClick={onPublishToBoard}
+                onClick={onViewBoard}
                 className="w-full py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg text-xs font-bold transition-transform hover:-translate-y-0.5 shadow-md"
               >
-                📋 결과 게시판에 공유하기
+                📋 결과 게시판 보기
               </button>
             )}
 
