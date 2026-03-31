@@ -60,14 +60,16 @@ export interface CampaignBrief {
 }
 
 export const DEFAULT_BRIEF: CampaignBrief = {
-  productName: '',
+  productName: 'AI 리더십 커뮤니티 "The Agents" 창단 웨비나',
   objective: 'lead_generation',
   target: {
-    role: 'C레벨',
+    role: '실무 매니저',
     industry: 'IT/SaaS',
     region: '국내',
   },
   budget: '5m_to_30m',
-  channels: ['linkedin', 'google_ads', 'kakao', 'instagram', 'webinar', 'email', 'youtube', 'blog'],
+  channels: ['webinar', 'email', 'kakao', 'instagram', 'linkedin'],
   language: 'ko',
+  additionalNotes: '신규 마케팅 커뮤니티 웨비나 참가자 모집을 위한 대대적인 캠페인. 참가자 500명 확보를 위해 혜택 중심의 카피와 SNS 카드뉴스가 필요합니다.',
 };
+
