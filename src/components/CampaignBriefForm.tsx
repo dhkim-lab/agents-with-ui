@@ -14,7 +14,20 @@ interface CampaignBriefFormProps {
 }
 
 export default function CampaignBriefForm({ onSubmit, isGenerating }: CampaignBriefFormProps) {
-  const [brief, setBrief] = useState<CampaignBrief>(DEFAULT_BRIEF);
+  // Initialize state with the demo-specific values directly
+  const [brief, setBrief] = useState<CampaignBrief>({
+    productName: 'AI 리더십 커뮤니티 "The Agents" 창단 웨비나',
+    objective: 'lead_generation',
+    target: {
+      role: '실무 매니저',
+      industry: 'IT/SaaS',
+      region: '국내',
+    },
+    budget: '5m_to_30m',
+    channels: ['webinar', 'email', 'kakao', 'instagram', 'linkedin'],
+    language: 'ko',
+    additionalNotes: '신규 마케팅 커뮤니티 웨비나 참가자 모집을 위한 대대적인 캠페인. 참가자 500명 확보를 위해 혜택 중심의 카피와 SNS 카드뉴스가 필요합니다.',
+  });
 
   const update = <K extends keyof CampaignBrief>(key: K, value: CampaignBrief[K]) => {
     setBrief(prev => ({ ...prev, [key]: value }));
