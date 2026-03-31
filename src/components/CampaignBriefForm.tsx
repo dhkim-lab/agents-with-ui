@@ -14,6 +14,7 @@ interface CampaignBriefFormProps {
 }
 
 export default function CampaignBriefForm({ onSubmit, isGenerating }: CampaignBriefFormProps) {
+  // Initialize state with the updated DEFAULT_BRIEF
   const [brief, setBrief] = useState<CampaignBrief>(DEFAULT_BRIEF);
 
   const update = <K extends keyof CampaignBrief>(key: K, value: CampaignBrief[K]) => {
