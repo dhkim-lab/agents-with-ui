@@ -1,48 +1,59 @@
 import React, { useEffect, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { motion } from 'framer-motion';
+import type { CampaignBrief } from '../types/brief';
+import { OBJECTIVE_LABELS } from '../types/brief';
 
 interface ResultPanelProps {
   isReady: boolean;
+  brief: CampaignBrief | null;
 }
 
-export const ResultPanel: React.FC<ResultPanelProps> = ({ isReady }) => {
+export const ResultPanel: React.FC<ResultPanelProps> = ({ isReady, brief }) => {
   const [content, setContent] = useState('');
 
-  const finalMarkup = `[CONFIDENTIAL] 마케팅 캠페인 전략 보고서
+  const generateMarkup = () => {
+    if (!brief) return '';
+    
+    const objLabel = OBJECTIVE_LABELS[brief.objective] || '마케팅 캠페인';
+    const channelList = brief.channels.map(c => c.toUpperCase()).join(', ');
+    
+    return `[CONFIDENTIAL] ${brief.productName} 전략 보고서
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1. 타겟 고객 분석
-• 주요 타겟: 실무 매니저 & C레벨 의사결정권자
-• 집중 시장: 국내 B2B SaaS 도입 고려 기업
-• 핵심 인사이트: 경쟁사 공통 약점 "도입 후 지원 부재"
+1. 캠페인 개요
+• 프로젝트명: ${brief.productName}
+• 캠페인 목표: ${objLabel}
+• 주력 채널: ${channelList}
 
-2. 핵심 메시지 (차별화 포인트)
-"검증된 ROI 342% 달성 기업의 선택"
-— 도입 사례 기반 신뢰 구축 + ROI 시뮬레이터 CTA
+2. 타겟 고객 분석
+• 주요 타겟: ${brief.target.role} (${brief.target.industry})
+• 지역 범위: ${brief.target.region}
+• 핵심 인사이트: 시장 분석 결과, 타겟 오디언스는 '신뢰성'과 '경험' 중심의 콘텐츠에 가장 높은 반응도를 보임.
 
-3. 캠페인 퍼널
-LinkedIn 광고 → 랜딩페이지(CTR 3.2%)
-→ ROI 시뮬레이터(전환 8.5%) → 웨비나 등록
-→ 이메일 시퀀스(오픈율 42%) → 영업팀 전달
+3. 핵심 메시지 (차별화 전략)
+"성공적인 ${brief.productName}을 위한 AI 기반 최적화 전략"
+— 데이터 기반 타겟팅 + 개인화된 메시지 자동 발송 시스템 구축
 
-4. 예산 배분 및 ROI 예측
-• LinkedIn: 45% | Google Ads: 25%
-• 웨비나: 20% | 이메일: 10%
-• 예상 CAC: ₩420,000 | 예상 리드: 340건/월
-• 예상 ROI: 285%
+4. 채널별 예상 퍼널 및 KPI
+• 유입: ${brief.channels[0] || 'SNS'} 광고 및 뉴스레터 (CTR 3.5% 목표)
+• 전환: 전용 랜딩페이지 시뮬레이션 결과 전환율 9.2% 예상
+• 최종 참여: 약 450~600건의 유효 리드 확보 기대
 
-5. 실행 계획
-• 1일차: 드립 이메일 시퀀스 세팅 (한국어 현지화)
-• 3일차: 리드 폼 A/B 테스트 시작
-• 7일차: 웨비나 라이브 (국내 시장 맞춤)
-• 14일차: 성과 분석 및 2차 최적화
+5. 실행 마일스톤
+• 1일차: 데이터 동기화 및 타겟 오디언스 세팅 (한국어 최적화)
+• 3일차: 모든 크리에이티브 에셋 배포 및 A/B 테스트 개시
+• 7일차: 실시간 성과 모니터링 기반 예산 재분배 실행
+• 14일차: 캠페인 성과 분석 및 차기 프로젝트 데이터 전이
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 작성: AI 마케팅 팀 (Alex·Kai·Mia·Nova·Rex)
-상태: 최종 승인 완료 — 자동 배포 대기 중
+상태: 최종 승인 완료 — 전 채널 자동 배포 실행 중
 `;
+  };
+
+  const finalMarkup = generateMarkup();
 
   useEffect(() => {
     if (isReady) {

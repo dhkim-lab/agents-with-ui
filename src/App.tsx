@@ -143,7 +143,10 @@ function App() {
       <BottomBar agents={engine.agents} />
 
       {/* Overlays */}
-      <ResultPanel isReady={engine.isResultReady && engine.currentPhaseId < 6} />
+      <ResultPanel 
+        isReady={engine.isResultReady && engine.currentPhaseId < 6} 
+        brief={currentBrief}
+      />
 
       {engine.isPublishDone && (
         <FinalSnsPopup
